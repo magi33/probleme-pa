@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define CAPACITY 10
+
+typedef struct {
+    int vec[CAPACITY];
+    int head;
+    int tail;
+    int size;
+} Queue;
+
+void initQueue(Queue* q) {
+    q->head = 0;
+    q->tail = 0;
+    q->size = 0;
+}
+
+int isFull(Queue* q) {
+    return q->size == CAPACITY;
+}
+
+int isEmpty(Queue* q) {
+    return q->size == 0;
+}
+
+void enqueue(Queue* q, int key) {
+    if (isFull(q)) {
+        printf("Coada este plină! Nu se poate insera elementul %d.\n", key);
+        return;
+    }
+    q->vec[q->tail] = key;
+    q->tail = (q->tail + 1) % CAPACITY;
+    q->size++;
+}
+
+int dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Coada este goală! Nu se poate scoate niciun element.\n");
+        return -1;
+    }
+    int elem = q->vec[q->head];
+    q->head = (q->head + 1) % CAPACITY;
+    q->size--;
+    return elem;
+}
+
+void printQueue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Coada este goală!\n");
+        return;
+    }
+    printf("Elementele din coadă: ");
+    for (int i = 0; i < q->size; i++) {
+        printf("%d ", q->vec[(q->head + i) % CAPACITY]);
+    }
+    printf("\n");
+}
+
+int main() {
+    Queue q;
+
+    initQueue(&q);
+
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+
+    printQueue(&q);
+
+    int elem = dequeue(&q);
+    if (elem != -1) {
+        printf("Element scos: %d\n", elem);
+    }
+
+    printQueue(&q);
+
+    return 0;
+}
