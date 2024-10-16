@@ -1,1 +1,1 @@
-# probleme-pa
+# probleme-pa   lucrate cu chatgpt
