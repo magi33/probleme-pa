@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct NodeT {
+    int data;
+    struct NodeT* next;
+} NodeT;
+
+NodeT* createNode(int key) {
+    NodeT* newNode = (NodeT*)malloc(sizeof(NodeT));
+    newNode->data = key;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void initStack(NodeT** stack) {
+    *stack = NULL;
+}
+
+void push(NodeT** stack, int key) {
+    NodeT* newNode = createNode(key);
+    newNode->next = *stack;
+    *stack = newNode;
+}
+
+NodeT* pop(NodeT** stack) {
+    if (*stack == NULL) {
+        printf("Stiva este goală!\n");
+        return NULL;
+    }
+    NodeT* temp = *stack;
+    *stack = (*stack)->next;
+    return temp;
+}
+
+void printStack(NodeT* stack) {
+    NodeT* temp = stack;
+    if (temp == NULL) {
+        printf("Stiva-goală!\n");
+        return;
+    }
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    NodeT* stack;
+
+    initStack(&stack);
+    push(&stack, 10);
+    push(&stack, 20);
+    push(&stack, 30);
+
+    printStack(stack);
+
+    NodeT* poppedNode = pop(&stack);
+    if (poppedNode != NULL) {
+        printf("Element scos din stivă: %d\n", poppedNode->data);
+        free(poppedNode);
+    }
+
+    printStack(stack);
+
+    return 0;
+}
