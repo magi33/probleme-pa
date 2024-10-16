@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define CAPACITY 10  // Dimensiunea maximă a cozii
+
+typedef struct {
+    int vec[CAPACITY];  // Vectorul care reprezintă coada
+    int head;           // Indexul primului element
+    int tail;           // Indexul următorului loc disponibil pentru inserare
+    int size;           // Dimensiunea curentă a cozii
+} Queue;
+
+// Inițializarea cozii (setează head și tail la 0 și dimensiunea la 0)
+void initQueue(Queue* q) {
+    q->head = 0;
+    q->tail = 0;
+    q->size = 0;
+}
+
+// Verifică dacă coada este plină
+int isFull(Queue* q) {
+    return q->size == CAPACITY;
+}
+
+// Verifică dacă coada este goală
+int isEmpty(Queue* q) {
+    return q->size == 0;
+}
+
+// Adaugă un element în coadă (enqueue)
+void enqueue(Queue* q, int key) {
+    if (isFull(q)) {
+        printf("Coada este plină! Nu se poate insera elementul %d.\n", key);
+        return;
+    }
+    q->vec[q->tail] = key;  // Inserează elementul la poziția tail
+    q->tail = (q->tail + 1) % CAPACITY;  // Actualizează tail pentru a face inserare circulară
+    q->size++;  // Crește dimensiunea cozii
+}
+
+// Scoate un element din coadă (dequeue)
+int dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Coada este goală! Nu se poate scoate niciun element.\n");
+        return -1;  // Returnăm o valoare indicativă când coada e goală
+    }
+    int elem = q->vec[q->head];  // Preluăm elementul de la head
+    q->head = (q->head + 1) % CAPACITY;  // Actualizează head pentru a face dequeue circulară
+    q->size--;  // Scade dimensiunea cozii
+    return elem;  // Returnează elementul scos
+}
+
+// Afișează elementele din coadă
+void printQueue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Coada este goală!\n");
+        return;
+    }
+    printf("Elementele din coadă: ");
+    for (int i = 0; i < q->size; i++) {
+        printf("%d ", q->vec[(q->head + i) % CAPACITY]);  // Afișează elementele, ajustând circular indexul
+    }
+    printf("\n");
+}
+
+int main() {
+    Queue q;
+
+    initQueue(&q);  // Inițializează coada
+
+    // Testăm funcțiile enqueue și dequeue
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+
+    printQueue(&q);  // Afișăm coada
+
+    int elem = dequeue(&q);  // Scoatem un element din coadă
+    if (elem != -1) {
+        printf("Element scos: %d\n", elem);
+    }
+
+    printQueue(&q);  // Afișăm coada după dequeue
+
+    return 0;
+}
