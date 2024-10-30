@@ -233,5 +233,3 @@ int isMirror(NodeT* a, NodeT* b) {
 ```
 
 ---
-
-Acest **cheat sheet** acoperă operațiile de bază pentru un BST, oferind o fundație solidă pentru manipularea arborilor binari de căutare în C.
