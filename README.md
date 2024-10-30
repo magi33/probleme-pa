@@ -1,1 +1,1 @@
-# probleme-pa 
+# Proiectarea algoritmilor
