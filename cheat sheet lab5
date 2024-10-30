@@ -1,0 +1,237 @@
+
+
+## 1. Definiție și Structura Nodului
+
+Un **Arbore Binar de Căutare (BST)** este o structură de date arbore, unde pentru fiecare nod:
+- Valorile din subarborele stâng sunt mai mici.
+- Valorile din subarborele drept sunt mai mari.
+
+### Structura unui Nod
+```c
+typedef int KeyType;
+
+typedef struct node {
+    KeyType key;
+    struct node *left;
+    struct node *right;
+} NodeT;
+
+NodeT *root = NULL; // rădăcina arborelui
+```
+
+---
+
+## 2. Inserarea unui Nod
+
+Inserarea în BST se face în așa fel încât structura să respecte proprietățile BST.
+
+### Algoritm Inserare
+1. Dacă arborele este vid, creează un nod și setează-l ca rădăcină.
+2. Dacă `key` este mai mic decât cheia rădăcinii, continuă în subarborele stâng.
+3. Dacă `key` este mai mare, continuă în subarborele drept.
+
+### Cod Inserare (Iterativ)
+```c
+NodeT* insertNode(NodeT* root, int key) {
+    NodeT* newNode = (NodeT*)malloc(sizeof(NodeT));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+
+    if (root == NULL) {
+        return newNode;
+    }
+
+    NodeT *parent = NULL, *current = root;
+    while (current != NULL) {
+        parent = current;
+        if (key < current->key)
+            current = current->left;
+        else if (key > current->key)
+            current = current->right;
+        else
+            return root; // Cheia există deja
+    }
+
+    if (key < parent->key)
+        parent->left = newNode;
+    else
+        parent->right = newNode;
+
+    return root;
+}
+```
+
+---
+
+## 3. Căutarea unui Nod
+
+Căutarea în BST este similară cu algoritmul de inserare, bazându-se pe compararea succesivă a valorilor.
+
+### Cod Căutare (Recursiv)
+```c
+NodeT* searchKey(NodeT* root, int key) {
+    if (root == NULL || root->key == key)
+        return root;
+
+    if (key < root->key)
+        return searchKey(root->left, key);
+    
+    return searchKey(root->right, key);
+}
+```
+
+---
+
+## 4. Ștergerea unui Nod
+
+### Cazuri de Ștergere:
+1. **Nod Frunză** - Setează referința părintelui la `NULL`.
+2. **Nod cu un singur copil** - Referința părintelui devine copilul nodului de șters.
+3. **Nod cu doi copii** - Nodul este înlocuit cu succesorul sau predecesorul său (cel mai mic nod din dreapta sau cel mai mare nod din stânga).
+
+### Cod Ștergere
+```c
+NodeT* findMinNode(NodeT* node) {
+    while (node && node->left != NULL)
+        node = node->left;
+    return node;
+}
+
+NodeT* deleteNode(NodeT* root, int key) {
+    if (root == NULL) return root;
+
+    if (key < root->key)
+        root->left = deleteNode(root->left, key);
+    else if (key > root->key)
+        root->right = deleteNode(root->right, key);
+    else {
+        if (root->left == NULL) {
+            NodeT* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            NodeT* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        NodeT* temp = findMinNode(root->right);
+        root->key = temp->key;
+        root->right = deleteNode(root->right, temp->key);
+    }
+    return root;
+}
+```
+
+---
+
+## 5. Traversările unui Arbore Binar
+
+Traversarea arborelui se face în moduri diferite, în funcție de ordine.
+
+### Cod Traversări
+```c
+void inOrder(NodeT* root) {
+    if (root != NULL) {
+        inOrder(root->left);
+        printf("%d ", root->key);
+        inOrder(root->right);
+    }
+}
+
+void preOrder(NodeT* root) {
+    if (root != NULL) {
+        printf("%d ", root->key);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+void postOrder(NodeT* root) {
+    if (root != NULL) {
+        postOrder(root->left);
+        postOrder(root->right);
+        printf("%d ", root->key);
+    }
+}
+```
+
+---
+
+## 6. Minimul și Maximul din Arbore
+
+### Cod Min/Max
+```c
+NodeT* findMin(NodeT* node) {
+    while (node->left != NULL)
+        node = node->left;
+    return node;
+}
+
+NodeT* findMax(NodeT* node) {
+    while (node->right != NULL)
+        node = node->right;
+    return node;
+}
+```
+
+---
+
+## 7. Succesor și Predecesor
+
+### Cod Succesor
+```c
+NodeT* successor(NodeT* node) {
+    if (node->right != NULL)
+        return findMin(node->right);
+    
+    NodeT* succ = NULL;
+    NodeT* ancestor = root;
+    while (ancestor != node) {
+        if (node->key < ancestor->key) {
+            succ = ancestor;
+            ancestor = ancestor->left;
+        } else
+            ancestor = ancestor->right;
+    }
+    return succ;
+}
+```
+
+### Cod Predecesor
+```c
+NodeT* predecesor(NodeT* node) {
+    if (node->left != NULL)
+        return findMax(node->left);
+
+    NodeT* pred = NULL;
+    NodeT* ancestor = root;
+    while (ancestor != node) {
+        if (node->key > ancestor->key) {
+            pred = ancestor;
+            ancestor = ancestor->right;
+        } else
+            ancestor = ancestor->left;
+    }
+    return pred;
+}
+```
+
+---
+
+## 8. Verificare dacă doi arbori sunt în oglindă
+
+```c
+int isMirror(NodeT* a, NodeT* b) {
+    if (a == NULL && b == NULL) return 1;
+    if (a == NULL || b == NULL) return 0;
+
+    return (a->key == b->key &&
+            isMirror(a->left, b->right) &&
+            isMirror(a->right, b->left));
+}
+```
+
+---
+
+Acest **cheat sheet** acoperă operațiile de bază pentru un BST, oferind o fundație solidă pentru manipularea arborilor binari de căutare în C.
