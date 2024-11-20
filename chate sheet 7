@@ -1,0 +1,35 @@
+
+ 1. **Definiții Generale**
+- **Graf**: Set de noduri (vârfuri) și muchii/arce care le conectează.
+- **Graf orientat (digraf)**: Arcurile au o direcție specifică între noduri.
+- **Graf neorientat**: Muchiile nu au o direcție specifică.
+
+#### 2. **Componente și Proprietăți**
+- **Cale**: Secvență de vârfuri conectate prin arce/muchii.
+- **Ciclu**: Cale care începe și se termină la același nod.
+- **Graf tare conex**: Există o cale între orice pereche de noduri.
+- **Subgraf**: Graf format dintr-o submulțime de noduri și arce/muchii ale unui graf mai mare.
+
+#### 3. **Reprezentare**
+- **Matrice de adiacență**:
+  - Matrice \( n \times n \) unde elementul A[i][j] este 1 dacă există o muchie de la nodul i la nodul j.
+  - Eficientă pentru verificarea adiacenței rapide, dar ocupă mult spațiu (O(n²)).
+- **Liste de adiacență**:
+  - Fiecare nod are o listă care păstrează informații despre nodurile adiacente.
+  - Spațiu necesar O(n + m), mai eficient pentru grafuri cu număr mic de muchii comparativ cu numărul de noduri.
+
+#### 4. **Parcurgerea BFS (Căutare în Lățime)**
+- **Utilizare**: Găsirea celei mai scurte căi între noduri, verificarea dacă un graf este bipartit, etc.
+- **Proces**:
+  - Începe de la un nod sursă și explorează toți vecinii săi, apoi vecinii vecinilor, și așa mai departe.
+  - Nodurile sunt vizitate în ordinea distanței crescătoare de la nodul sursă.
+- **Implementare**:
+  - Se folosește o coadă pentru a gestiona ordinea de vizitare a nodurilor.
+  - Fiecare nod vizitat este marcat pentru a preveni re-vizitarea.
+
+#### 5. **Probleme Practice**
+- **Implementarea BFS pentru grafuri orientate și neorientate**:
+  - Parcurge nodurile și arcele/muchiile conform unei reprezentări date (matrice sau liste de adiacență).
+  - Aplicații diverse: determinarea componentelor conexe, verificarea proprietăților grafurilor.
+
+
